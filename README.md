@@ -1,5 +1,20 @@
 # strong_s2s_baseline_parser
+#### An Empirical Study of Building a Strong Baseline for Constituency Parsing
 
+```
+http://www.aclweb.org/anthology/P18-2097
+@inproceedings{P18-2097,
+    title = "An Empirical Study of Building a Strong Baseline for Constituency Parsing",
+    author = "Suzuki, Jun  and  Takase, Sho  and  Kamigaito, Hidetaka  and  Morishita, Makoto  and  Nagata, Masaaki",
+    booktitle = "Proceedings of the 56th Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers)",
+    month = "July",
+    year = "2018",
+    address = "Melbourne, Australia",
+    publisher = "Association for Computational Linguistics",
+    url = "http://www.aclweb.org/anthology/P18-2097",
+    pages = "612--618",
+}
+```
 
 ## Requirement
 * chainer
@@ -7,7 +22,7 @@
 
 
 ## Preparing Dataset
-* Obtain, a modified version of ptbconv-3.0
+#### Obtain, a modified version of ptbconv-3.0
 ```bash
 git clone https://github.com/kamigaito/ptbconv-3.0.git
 cd ptbconv-3.0
@@ -15,7 +30,7 @@ cd ptbconv-3.0
 make
 ```
 
-* Convert format of Penn Treebank3 *.mrg by ptbconv-3.0
+#### Convert format of Penn Treebank3 *.mrg by ptbconv-3.0
 ```
 # constituency format
 /path-to-ptbconv-3.0/ptbconv -B < [sec.02-21.mrg] | scripts/strip-start-end-bracket.sh > tmp/sec.02-21.cnt.txt
@@ -47,12 +62,12 @@ cat data/sec.22.se.const    | perl script/combine_pos.pl data/sec.22.pos2    > d
 
 ```
 
-* Get subword-nmt for obtaining subword information
+#### Get subword-nmt for obtaining subword information
 ```bash
 git clone https://github.com/rsennrich/subword-nmt
 ```
 
-* Make input files
+#### Make input files
 ```bash
 /path-subword-nmt/learn_bpe.py -s 1000 < data/sec.02-21.sent > data/sec.02-21.sent.bpe1000.dict
 
@@ -81,22 +96,22 @@ cat data/sec.02-21.wposA.se.const  | python /path-to-mlpnlp-nmt/count_freq.py 0 
 
 ```
 
-* Obtain evalb to evaluate parser performance
+#### Obtain evalb to evaluate parser performance
   * https://nlp.cs.nyu.edu/evalb/
 
-* Run training/evaluation script
+#### Run training/evaluation script
 ```bash
 ./train_PTB_enc_dec_0508_wbpeU_wXX_wPA_woglove.sh 0 2720
 ```
 
- * 10 models
+#### 10 models
 ```bash
 for SEED in 2720 2721 2722 2723 2724 2725 2726 2727 2728 2729  ;do \
    ./train_PTB_enc_dec_0508_wbpeU_wXX_wPA_woglove.sh 0 ${SEED} ;\
 done
 ```
 
- * Ensemble (evaluation)
+#### Ensemble (evaluation)
 ```bash
 DIR=models_encdec_mb16_SGD_e300h200L2_gc1_wbpeU_wXX_wPA_wog_wTying_wMergeFWBW_rs ; \
 ./train_PTB_enc_dec_0508_ENSEMBLE.sh 0 \
