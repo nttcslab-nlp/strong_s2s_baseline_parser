@@ -81,14 +81,14 @@ perl scripts/combine_bpe.pl data/sec.23.sent  data/sec.23.sent_bpe1000 > data/se
 ```
 
 ## Run training/evaluation code
-* Get the mlpnlp-nmt code for training/test encoder-decoder model
+#### Get the mlpnlp-nmt code for training/test encoder-decoder model
 ```bash
 git clone https://github.com/mlpnlp/mlpnlp-nmt.git
 cd mlpnlp-nmt
 git checkout for_parser
 ```
 
-* Make vocab files
+#### Make vocab files
 ```bash
 cat data/sec.02-21.sent_w_bpe1000_wunk data/sec.22.sent_w_bpe1000_wunk data/sec.23.sent_w_bpe1000_wunk  | perl -pe 's/\|\|\|/ /g' | python /path-to-mlpnlp-nmt/count_freq.py 0 |grep -v "<unk>" > data/all.sent_w_bpe1000.vocab
 cat data/sec.02-21.se.const        | python /path-to-mlpnlp-nmt/count_freq.py 0  > data/sec.02-21.se.const.vocab
