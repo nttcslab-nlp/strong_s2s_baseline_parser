@@ -5,12 +5,6 @@
 * chainer
   * see instruction https://chainer.org
 
-* bottleneck
-  * see details in https://kwgoodman.github.io/bottleneck-doc/release.html
-```bash
-pip install bottleneck
-```
-
 
 ## Preparing Dataset
 * Obtain, a modified version of ptbconv-3.0
@@ -71,7 +65,7 @@ perl scripts/combine_bpe.pl data/sec.22.sent  data/sec.22.sent_bpe1000 > data/se
 perl scripts/combine_bpe.pl data/sec.23.sent  data/sec.23.sent_bpe1000 > data/sec.23.sent_w_bpe1000_wunk
 ```
 
-
+## Run training/evaluation code
 * Get the mlpnlp-nmt code for training/test encoder-decoder model
 ```bash
 git clone https://github.com/mlpnlp/mlpnlp-nmt.git
@@ -88,7 +82,7 @@ cat data/sec.02-21.wposA.se.const  | python /path-to-mlpnlp-nmt/count_freq.py 0 
 ```
 
 * Obtain evalb to evaluate parser performance
- * https://nlp.cs.nyu.edu/evalb/
+  * https://nlp.cs.nyu.edu/evalb/
 
 * Run training/evaluation script
 ```bash
