@@ -1,8 +1,7 @@
 # strong_s2s_baseline_parser
 #### An Empirical Study of Building a Strong Baseline for Constituency Parsing
-
+* http://www.aclweb.org/anthology/P18-2097
 ```
-http://www.aclweb.org/anthology/P18-2097
 @inproceedings{P18-2097,
     title = "An Empirical Study of Building a Strong Baseline for Constituency Parsing",
     author = "Suzuki, Jun  and  Takase, Sho  and  Kamigaito, Hidetaka  and  Morishita, Makoto  and  Nagata, Masaaki",
