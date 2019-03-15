@@ -92,12 +92,23 @@ cat data/sec.02-21.wposA.se.const  | python /path-to-mlpnlp-nmt/count_freq.py 0 
 
 * Run training/evaluation script
 ```bash
-./train_PTB_enc_dec_single_qs_0508_wbpeU_wXX_wPA_woglove.sh 0 2720
+./train_PTB_enc_dec_0508_wbpeU_wXX_wPA_woglove.sh 0 2720
 ```
 
  * 10 models
 ```bash
 for SEED in 2720 2721 2722 2723 2724 2725 2726 2727 2728 2729  ;do \
-   ./train_PTB_enc_dec_single_qs_0508_wbpeU_wXX_wPA_woglove.sh 0 ${SEED} ;\
+   ./train_PTB_enc_dec_0508_wbpeU_wXX_wPA_woglove.sh 0 ${SEED} ;\
 done
+```
+
+ * Ensemble (evaluation)
+```bash
+DIR=models_encdec_mb16_SGD_e300h200L2_gc1_wbpeU_wXX_wPA_wog_wTying_wMergeFWBW_rs ; \
+./train_PTB_enc_dec_0508_ENSEMBLE.sh 0 \
+ ${DIR}2720/model.setting \
+ ${DIR}2720/model.epoch100:${DIR}2721/model.epoch100:${DIR}2722/model.epoch100:${DIR}2723/model.epoch100:${DIR}2724/model.epoch100:${DIR}2725/model.epoch100:${DIR}2726/model.epoch100:${DIR}2727/model.epoch100 \
+ ${DIR}2720/ \
+ data/sec.22.sent_w_bpe1000_wunk \
+ data/sec.23.sent_w_bpe1000_wunk
 ```
