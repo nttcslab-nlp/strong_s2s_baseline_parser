@@ -7,12 +7,12 @@ DEV_SRC=data/sec.22.sent_w_bpe1000_wunk
 DEV_TRG=data/sec.22.se.const:data/sec.22.wposA.se.const
 DEV_SRC_ORIG=data/sec.22.sent
 DEV_TRG_POS=data/sec.22.pos
-DEV_TRG_GOLD=data/sec22.gold
+DEV_TRG_GOLD=data/sec.22.gold
 
 TEST_SRC=data/sec.23.sent_w_bpe1000_wunk
 TEST_SRC_ORIG=data/sec.23.sent
 TEST_TRG_POS=data/sec.23.pos
-TEST_TRG_GOLD=data/sec23.gold
+TEST_TRG_GOLD=data/sec.23.gold
 
 VOCAB_SRC=data/all.sent_w_bpe1000.vocab2
 VOCAB_TRG=data/sec.02-21.se.const.vocab:data/sec.02-21.wposA.se.const.vocab
