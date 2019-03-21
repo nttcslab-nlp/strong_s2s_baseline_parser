@@ -31,33 +31,51 @@ make
 
 #### Convert format of Penn Treebank3 *.mrg by ptbconv-3.0
 ```
-# constituency format
-/path-to-ptbconv-3.0/ptbconv -B < [sec.02-21.mrg] | scripts/strip-start-end-bracket.sh > tmp/sec.02-21.cnt.txt
-/path-to-ptbconv-3.0/ptbconv -B < [sec.22.mrg] | scripts/strip-start-end-bracket.sh > tmp/sec.22.cnt.txt
-/path-to-ptbconv-3.0/ptbconv -B < [sec.23.mrg] | scripts/strip-start-end-bracket.sh > tmp/sec.23.cnt.txt
+# copy ptb3
+for i in 00 01 02 03 04 05 06 07 08 09 `seq 10 24` ;do \
+    cat /path-to-ptb3/${i}/WSJ_*.MRG > tmp/sec.${i}.mrg ;\
+done
 
-# dependency format
-/path-to-ptbconv-3.0/ptbconv -D < [sec.02-21.mrg] > tmp/sec.02-21.dep.txt
-/path-to-ptbconv-3.0/ptbconv -D < [sec.22.mrg] > tmp/sec.22.dep.txt
-/path-to-ptbconv-3.0/ptbconv -D < [sec.23.mrg] > tmp/sec.23.dep.txt
 
-# word->XX format
-perl scripts/encode.pl tmp/sec.02-21.{cnt,dep}.txt tmp/sec.02-21.{const,align}
-perl scripts/encode.pl tmp/sec.22.{cnt,dep}.txt tmp/sec.22.{const,align}
+# get raw sentences and pos sequences via the ptbconv dependency format
+for i in 00 01 02 03 04 05 06 07 08 09 `seq 10 24` ;do \
+    cat tmp/sec.${i}.mrg   | ptbconv-3.0/ptbconv -D >  tmp/sec.${i}.dep.txt  ;\
+    cat tmp/sec.${i}.dep.txt | perl scripts/get_column.pl 0 3 > tmp/sec.${i}.sent ;\
+    cat tmp/sec.${i}.dep.txt | perl scripts/get_column.pl 1 3 > tmp/sec.${i}.pos  ;\
+done
 
-scripts/add-start-end-marker.sh < tmp/sec.02-21.const > data/sec.02-21.se.const
-scripts/add-start-end-marker.sh < tmp/sec.22.const    > data/sec.22.se.const
 
-perl scripts/get_column.pl < tmp/sec.02-21.dep.txt 0 3 > tmp/sec.02-21.sent
-perl scripts/get_column.pl < tmp/sec.22.dep.txt 0 3    > tmp/sec.22.sent
-perl scripts/get_column.pl < tmp/sec.23.dep.txt 0 3    > tmp/sec.23.sent
+# remove function tags and empty symbols, and then conver word->XX format
+for i in 00 01 02 03 04 05 06 07 08 09 `seq 10 24` ;do \
+    cat tmp/sec.${i}.mrg   | perl scripts/remove_function_none_tag.pl | scripts/strip-start-end-bracket.sh > tmp/sec.${i}.cnt.txt  ;\
+    perl scripts/encode.pl tmp/sec.${i}.cnt.txt  tmp/sec.${i}.const  ;\
+    cat tmp/sec.${i}.const | scripts/add-start-end-marker.sh > tmp/sec.${i}.se.const ;\
+done
 
-perl scripts/get_column.pl < tmp/sec.02-21.dep.txt 1 3 > tmp/sec.02-21.pos
-perl scripts/get_column.pl < tmp/sec.22.dep.txt 1 3    > tmp/sec.22.pos
-perl scripts/get_column.pl < tmp/sec.23.dep.txt 1 3    > tmp/sec.23.pos
 
-cat data/sec.02-21.se.const | perl script/combine_pos.pl data/sec.02-21.pos2 > data/sec.02-21.wposA.se.const
-cat data/sec.22.se.const    | perl script/combine_pos.pl data/sec.22.pos2    > data/sec.22.wposA.se.const
+# finalize input files (word sequence files)
+for i in 02 03 04 05 06 07 08 09 `seq 10 21` ;do \
+    cat tmp/sec.${i}.sent ;\
+done > data/sec.02-21.sent
+cp tmp/sec.22.sent tmp/sec.23.sent data
+
+
+# finalize output files (words with brackets)
+{pfor i in 02 03 04 05 06 07 08 09 `seq 10 21` ;do \
+    cat tmp/sec.${i}.se.const ;\
+done > data/sec.02-21.se.const
+cp tmp/sec.22.se.const data
+
+# make output file with pos info
+cat data/sec.02-21.se.const | perl scripts/combine_pos.pl data/sec.02-21.pos2 > data/sec.02-21.wposA.se.const
+cat data/sec.22.se.const    | perl scripts/combine_pos.pl data/sec.22.pos2    > data/sec.22.wposA.se.const
+
+# make gold data for evaluation
+cat tmp/sec.22.cnt.txt  | perl -pe 'chomp; $_="(TOP ".$_.")\n"' > data/sec.22.gold
+cat tmp/sec.23.cnt.txt  | perl -pe 'chomp; $_="(TOP ".$_.")\n"' > data/sec.23.gold
+
+# copy pos files for also evaluation
+cp tmp/sec.22.pos tmp/sec.23.pos   data
 
 ```
 
